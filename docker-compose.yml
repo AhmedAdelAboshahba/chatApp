@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+  db: 
+    image: mysql:5.7
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: chatdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./my-data:/var/lib/mysql
+  web:
+    build: .
+    command: bash -c "rm -f /app/tmp/pids/server.pid && sh ./wait_for_service.sh db 3306 && sh ./entrypoint.sh && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+volumes:
+  my-data:
