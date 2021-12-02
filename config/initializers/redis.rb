@@ -1,0 +1,1 @@
+$cache = Redis.new(host: "redis", port: '6378')

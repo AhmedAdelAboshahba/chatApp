@@ -9,6 +9,6 @@ class CreateMessages < ActiveRecord::Migration[5.2]
   end
 
   def down
-    drop_table :chats
+    drop_table :messages
   end
 end
