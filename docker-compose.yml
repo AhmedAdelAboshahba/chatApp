@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3"
 services:
   db: 
     image: mysql:5.7
@@ -27,16 +27,25 @@ services:
     command: bundle exec sidekiq -C ./config/sidekiq.yml
     volumes:
       - '.:/app'
+  elasticsearch:
+    image: elasticsearch:5.4.0-alpine
+    restart: always
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./volumes/es:/usr/share/elasticsearch/data
   web:
     build: .
-    command: bash -c "rm -f /app/tmp/pids/server.pid && sh ./wait_for_service.sh db 3306 && sh ./entrypoint.sh && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "sh ./wait_for_elasticsearch.sh elasticsearch:9200 && sh ./wait_for_service.sh db 3306 && sh ./entrypoint.sh && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/app
     ports:
       - "3000:3000"
     depends_on:
-      - db
       - redis
+      - sidekiq
+      - elasticsearch
+      - db
 volumes:
   my-data:
   redis-data:

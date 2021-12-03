@@ -69,3 +69,7 @@ gem 'redis'
 gem 'redis-namespace'
 
 gem 'sidekiq'
+
+gem 'elasticsearch', '~> 7.13.0'
+gem 'elasticsearch-rails', '~> 7.1.0'
+gem 'elasticsearch-model', '~> 7.1.0'

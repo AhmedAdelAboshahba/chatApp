@@ -1,3 +1,5 @@
 :queues:
   - chats_counter
   - messages_counter
+  - chats 
+  - messages

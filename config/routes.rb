@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :applications do
         resources :chats do
-          resources :messages
+          resources :messages do
+            collection do 
+              get :search
+            end
+          end
         end
       end
     end

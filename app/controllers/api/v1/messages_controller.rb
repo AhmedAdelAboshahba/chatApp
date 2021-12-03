@@ -16,11 +16,17 @@ class Api::V1::MessagesController < Api::ApiController
     message = Message.new(message_params)
     message.chat_id = @chat.id
     message.number =  $cache.incr("application_#{@application.token}_chat_#{@chat.number}_messages_count")
-    if message.save
+    if message.valid?
+      SaveMessageJob.perform_later({number: message.number, chat_id: message.chat_id, content: message.content})
       json_response(message.as_json({ only: %i[number content] }), :ok)
     else
-      json_response(nil, :bad_request, message.errors.full_message)
+      json_response(nil, :bad_request, message.errors.messages)
     end
+  end
+
+  def search
+    @matches = Message.search(params[:query], @chat.id)
+    json_response({ messages: @matches.as_json({ except: %i[_id id chat_id] }) }, :ok)
   end
 
   private

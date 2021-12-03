@@ -13,10 +13,8 @@ class Api::V1::ChatsController < Api::ApiController
 
   def create
     number = $cache.incr("application_#{@application.token}_chats_count")
-    chat = Chat.create(number: number)
-    @application.chats << chat
-    MessagesCounterUpdateJob.set(wait: 1.hour).perform_later(chat)
-    json_response(chat.as_json({ only: %i[number messages_count] }), :ok)
+    SaveChatJob.perform_later({number: number, application_id: @application.id})
+    json_response({number: number, messages_count: 0}, :ok)
   end
 
   private
