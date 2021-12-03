@@ -138,8 +138,6 @@ Host: localhost:3000
     "page": 1
 }
 ```
-</br>
-
 ## Get chat
 
 ```
@@ -154,5 +152,97 @@ Host: localhost:3000
         "messages_count": 1
     }
 ]
+```
+  
+## Create message
+
+```
+POST /api/v1/applications/:application_token/chats/:chat_number/messages/ HTTP/1.1
+Host: localhost:3000
+
+{
+    "message":  {
+        "content": "Hello"
+    }
+}
+```
+### Response
+```
+{
+    "message": {
+        "content": "Hello",
+        "number": 1
+    }
+}
+```
+
+## List all messages
+```
+GET /api/v1/applications/:application_token/chats/:chat_number/messages HTTP/1.1
+Host: localhost:3000
+
+{
+    "page": 1,
+    "per_page": 2
+}
+```
+### Response
+```
+{
+    "messages": [
+        {
+            "content": "Hello",
+            "number": 1
+        },
+        {
+            "description": "Hi",
+            "number": 2
+        }
+    ],
+    "count": 4,
+    "per_page": 2,
+    "page": 1
+}
+```
+## Get message
+
+```
+GET /api/v1/applications/:application_token/chats/:chat_number/messages/:message_number HTTP/1.1
+Host: localhost:3000
+```
+### Response 
+```
+{
+    "content": "Hello",
+    "seq_num": 1
+}
+```
+## Search for a message
+
+```
+GET /api/v1/applications/:application_token/chats/:chat_number/messages/search HTTP/1.1
+Host: localhost:3000
+
+{
+    "query": "Hello"
+}
+```
+### Response
+```
+{
+    "messages": [
+        {
+            "_index": "messages",
+            "_type": "message",
+            "_score": 2.540445,
+            "_source": {
+                "content": "Hello world",
+                "number": 1,
+                "created_at": "2021-12-03T15:27:32.000Z",
+                "updated_at": "2021-12-03T15:27:32.000Z"
+            }
+        }
+    ]
+}
 ```
 
