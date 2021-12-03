@@ -1,24 +1,74 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# ChatSystem
+A chat system which create messages related to certain chats and applications .
 
-Things you may want to cover:
+## Technologies
+* **MySQL**: For database
+* **Ruby on rails**: Backend framework
+## Installation
+run ` docker-compose up `
 
-* Ruby version
+# API's
 
-* System dependencies
+## List Applications
 
-* Configuration
+### Request
 
-* Database creation
+```
+GET /api/v1/applications/ HTTP/1.1
+Host: localhost:3000
 
-* Database initialization
+{
+    "page": 1,
+    "per_page": 2
+}
+```
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+### Response
 
-* Deployment instructions
+```
+{
+    "applications": [
+        {
+            "token": "KbX11c8eZqBaWF896sBbNYD5",
+            "name": "firstApp",
+            "chats_count": 2
+        },
+        {
+            "token": "HyX11c8eZaaaWF896sBbNYD5",
+            "name": "secondApp",
+            "chats_count": 3
+        }
+    ],
+    "number_of_pages": 3,
+    "per_page": 2,
+    "page": 1
+}
+```
 
-* ...
+## Create a new Application
+
+### Request
+
+```
+POST /api/v1/applications HTTP/1.1
+Host: localhost:3000
+
+{
+    "application": {
+        "name": "firstApp"
+    }
+}
+```
+
+### Response
+```
+{
+    "token": "KbX11c8eZqBaWF896sBbNYD5",
+    "name": "firstApp",
+    "chats_count": 0
+}
+```
+
